@@ -7,15 +7,21 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "conv": "npx convex dev"
+    "convex": "npx convex dev",
+    "inngest": "npx inngest-cli@latest dev"
   },
   "dependencies": {
+    "@ai-sdk/anthropic": "^4.0.85",
+    "@ai-sdk/google": "^4.0.102",
+    "@ai-sdk/openai": "^4.0.99",
     "@base-ui/react": "^1.9.0",
     "@clerk/nextjs": "^7.9.17",
     "@clerk/ui": "^1.40.2",
+    "ai": "^7.0.148",
     "class-variance-authority": "^0.7.1",
     "cn": "^0.5.0",
     "convex": "^1.47.0",
+    "inngest": "^4.25.0",
     "lucide-react": "^1.59.0",
     "next": "16.4.2",
     "next-themes": "^0.4.6",
