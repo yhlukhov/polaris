@@ -14,11 +14,7 @@ export default function RootLayout({ children }: LayoutProps<'/'>) {
     <html
       lang='en'
       suppressHydrationWarning
-      className={cn(
-        'antialiased',
-        inter.variable,
-        plexMono.variable,
-      )}
+      className={cn('antialiased', inter.variable, plexMono.variable)}
     >
       <body>
         <Providers>{children}</Providers>

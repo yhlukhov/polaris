@@ -1,0 +1,15 @@
+POST http://localhost:3000/api/demo/createTask HTTP/1.1
+content-type: application/json
+
+{
+    "id": "Sample - task - 3"
+}
+
+###
+
+POST http://localhost:3000/api/demo/generate-text HTTP/1.1
+content-type: application/json
+
+{
+    "prompt": "Write fried potatoe japanice short recipe"
+}

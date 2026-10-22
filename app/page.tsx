@@ -5,6 +5,8 @@ import { ProjectsTable } from '@/components/projects-table'
 import { Header } from '@/components/header'
 import { api } from '@/convex/_generated/api'
 
+
+
 export default function Home() {
   const projects = useQuery(api.projects.get)
 
