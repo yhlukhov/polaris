@@ -3,7 +3,9 @@ import { inngest } from './client'
 import { openai } from '@ai-sdk/openai'
 import { firecrawl } from '@/lib/firecrawl'
 
-const URL_REGEX = /https?:\/\/[^\s]+/g
+// Matches http(s) URLs but never ends on trailing prose punctuation
+// (e.g. "See https://example.com/docs." -> "https://example.com/docs")
+const URL_REGEX = /https?:\/\/\S*[^\s.,;:!?'")\]}>]/g
 
 export const generateTextAI = inngest.createFunction(
   {
@@ -20,11 +22,11 @@ export const generateTextAI = inngest.createFunction(
     const scrapedContent = await step.run('scrape-urls', async () => {
       const results = await Promise.all(
         urls.map(async (url) => {
-          const result = await firecrawl.scrape(url, {formats: ['markdown']})
+          const result = await firecrawl.scrape(url, { formats: ['markdown'] })
           return result.markdown ?? null
-        })
+        }),
       )
-      return results.filter(Boolean).join("\n\n")
+      return results.filter(Boolean).join('\n\n')
     })
 
     const finalPrompt = scrapedContent
