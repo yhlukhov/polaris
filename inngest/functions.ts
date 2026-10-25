@@ -35,11 +35,25 @@ export const generateTextAI = inngest.createFunction(
 
     const response = await step.run('generate-text', async () => {
       const result = await generateText({
-        model: openai('gpt-5.4-nano'),
+        model: openai('gpt-6-luna'),
         prompt: finalPrompt,
+        telemetry: {
+          isEnabled: true,
+          recordInputs: true,
+          recordOutputs: true,
+        },
       })
       return result.text
     })
     return { response }
   },
 )
+
+export const demoError = inngest.createFunction({
+  id: 'demo-error',
+  triggers: { event: 'demo/error' },
+}, async ({event, step}) => {
+  await step.run('fail', async () => {
+    throw Error("Inngest error: Background job failed")
+  })
+})
