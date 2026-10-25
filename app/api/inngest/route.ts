@@ -1,8 +1,8 @@
 import { serve } from 'inngest/next'
 import { inngest } from '@/inngest/client'
-import { generateTextAI } from '@/inngest/functions'
+import { generateTextAI, demoError } from '@/inngest/functions'
 
-export const {GET, POST, PUT} = serve({
+export const { GET, POST, PUT } = serve({
   client: inngest,
-  functions: [generateTextAI],
+  functions: [generateTextAI, demoError],
 })

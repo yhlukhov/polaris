@@ -17,6 +17,8 @@
     "@base-ui/react": "^1.9.0",
     "@clerk/nextjs": "^7.9.17",
     "@clerk/ui": "^1.40.2",
+    "@inngest/middleware-sentry": "^1.0.0",
+    "@sentry/nextjs": "^11.9.0",
     "ai": "^7.0.148",
     "class-variance-authority": "^0.7.1",
     "cn": "^0.5.0",
