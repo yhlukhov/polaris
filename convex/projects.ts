@@ -1,16 +1,32 @@
 import { v } from 'convex/values'
 import { query, mutation } from './_generated/server'
+import { verifyAuth } from './auth'
 
 // Get all owner's projects
 export const get = query({
   args: {},
   handler: async (ctx) => {
-    const identity = await ctx.auth.getUserIdentity()
-    if(!identity) return []
+    const identity = await verifyAuth(ctx)
     return await ctx.db
       .query('projects')
       .withIndex('by_owner', (q) => q.eq('ownerId', identity.subject))
+      .order('desc')
       .collect()
+  },
+})
+
+// Get owner's projects with limit
+export const getPartial = query({
+  args: {
+    limit: v.number()
+  },
+  handler: async (ctx, {limit}) => {
+    const identity = await verifyAuth(ctx)
+    return await ctx.db
+      .query('projects')
+      .withIndex('by_owner', (q) => q.eq('ownerId', identity.subject))
+      .order('desc')
+      .take(limit)
   },
 })
 
@@ -20,12 +36,12 @@ export const create = mutation({
     name: v.string(),
   },
   handler: async (ctx, { name }) => {
-    const identity = await ctx.auth.getUserIdentity()
-    if (!identity) throw new Error('Unauthorized')
-    await ctx.db.insert('projects', {
+    const identity = await verifyAuth(ctx)
+    const projectId = await ctx.db.insert('projects', {
       name,
-      importStatus: 'importing',
       ownerId: identity.subject,
+      updatedAt: Date.now(),
     })
+    return projectId
   },
 })
