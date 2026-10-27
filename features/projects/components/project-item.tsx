@@ -1,8 +1,7 @@
 import { Doc } from '@/convex/_generated/dataModel'
-import {
-  ArrowRightIcon,
-} from 'lucide-react'
+import { ArrowRightIcon } from 'lucide-react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { getProjectIcon, formatTimestamp } from '../utils'
 
@@ -30,25 +29,25 @@ export function ProjectItem({ data }: Props) {
 }
 
 export function ContinueCard({ data }: Props) {
+  const router = useRouter()
   return (
     <div className='flex flex-col gap-2'>
       <div className='text-xs text-muted-foreground'>
         <Button
           variant={'outline'}
-          className='h-auto items-start justify-start p-4 bg-background border rounded-none flex flex-col gap-2'
+          className='h-auto items-center justify-start p-4 bg-background border rounded-none flex flex-col gap-2 group'
+          onClick={() => router.push(`/projects/${data._id}`)}
         >
-          <Link href={`/projects/${data._id}`} className='group'>
-            <div className='flex items-center justify-between w-full'>
-              <div className='flex items-center gap-2'>
-                {getProjectIcon(data, 3.5)}
-                <span className='font-medium truncate'>{data.name}</span>
-              </div>
-              <ArrowRightIcon className='size-4 text-muted-foreground group-hover:translate-x-0.5 transition-transform' />
+          <div className='flex items-center justify-between'>
+            <div className='flex items-center gap-2'>
+              {getProjectIcon(data, 3.5)}
+              <span className='font-medium truncate'>{data.name}</span>
             </div>
-            <span className='text-xs text-muted-foreground'>
-              {formatTimestamp(data.updatedAt)}
-            </span>
-          </Link>
+            <ArrowRightIcon className='size-4 text-muted-foreground ml-1 group-hover:translate-x-0.5 transition-transform' />
+          </div>
+          <span className='text-xs text-muted-foreground'>
+            {formatTimestamp(data.updatedAt)}
+          </span>
         </Button>
       </div>
     </div>
