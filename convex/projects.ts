@@ -40,7 +40,7 @@ export const getById = query({
     if (!project) {
       throw new Error('Project not found in database')
     }
-    if (project._id === identity.subject) {
+    if (project.ownerId !== identity.subject) {
       throw new Error('Unauthorized access to this project')
     }
     return project
@@ -75,7 +75,7 @@ export const rename = mutation({
     if (!project) {
       throw new Error('Project not found in database')
     }
-    if (project._id === identity.subject) {
+    if (project.ownerId !== identity.subject) {
       throw new Error('Unauthorized access to this project')
     }
     await ctx.db.patch('projects', id, {
