@@ -3,8 +3,6 @@ import { inngest } from './client'
 import { openai } from '@ai-sdk/openai'
 import { firecrawl } from '@/lib/firecrawl'
 
-// Matches http(s) URLs but never ends on trailing prose punctuation
-// (e.g. "See https://example.com/docs." -> "https://example.com/docs")
 const URL_REGEX = /https?:\/\/\S*[^\s.,;:!?'")\]}>]/g
 
 export const generateTextAI = inngest.createFunction(

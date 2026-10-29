@@ -2,7 +2,8 @@ import { v } from 'convex/values'
 import { query, mutation } from './_generated/server'
 import { verifyAuth } from './auth'
 
-// Get all owner's projects
+/* QUERIES */
+
 export const get = query({
   args: {},
   handler: async (ctx) => {
@@ -15,12 +16,11 @@ export const get = query({
   },
 })
 
-// Get owner's projects with limit
 export const getPartial = query({
   args: {
-    limit: v.number()
+    limit: v.number(),
   },
-  handler: async (ctx, {limit}) => {
+  handler: async (ctx, { limit }) => {
     const identity = await verifyAuth(ctx)
     return await ctx.db
       .query('projects')
@@ -30,7 +30,25 @@ export const getPartial = query({
   },
 })
 
-// Create new project
+export const getById = query({
+  args: {
+    id: v.id('projects'),
+  },
+  handler: async (ctx, { id }) => {
+    const identity = await verifyAuth(ctx)
+    const project = await ctx.db.get('projects', id)
+    if (!project) {
+      throw new Error('Project not found in database')
+    }
+    if (project.ownerId !== identity.subject) {
+      throw new Error('Unauthorized access to this project')
+    }
+    return project
+  },
+})
+
+/* MUTATIONS */
+
 export const create = mutation({
   args: {
     name: v.string(),
@@ -43,5 +61,26 @@ export const create = mutation({
       updatedAt: Date.now(),
     })
     return projectId
+  },
+})
+
+export const rename = mutation({
+  args: {
+    id: v.id('projects'),
+    name: v.string(),
+  },
+  handler: async (ctx, { id, name }) => {
+    const identity = await verifyAuth(ctx)
+    const project = await ctx.db.get('projects', id)
+    if (!project) {
+      throw new Error('Project not found in database')
+    }
+    if (project.ownerId !== identity.subject) {
+      throw new Error('Unauthorized access to this project')
+    }
+    await ctx.db.patch('projects', id, {
+      name,
+      updatedAt: Date.now()
+    })
   },
 })
